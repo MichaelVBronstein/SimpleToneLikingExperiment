@@ -1,0 +1,14 @@
+function[h] = TimerExample(TimeToShow)
+%TimeToShow is the duration of the timer and the time you want the image displayed for
+try
+    clear stat
+end
+TIMER1 = timer('TimerFcn', 'stat=false; h = 12;',... 
+                 'StartDelay',TimeToShow); %This number here is how long the timer waits for after it is made.
+%exactly N second display?
+h = 0;
+start(TIMER1)
+waitfor(TIMER1)
+clear TIMER1
+clear stat
+end
