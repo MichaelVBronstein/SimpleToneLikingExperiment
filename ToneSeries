@@ -1,0 +1,78 @@
+%  Copyright 2014 Michael V. Bronstein
+%  Licensed under the Apache License, Version 2.0 (the "License");
+%  you may not use this file except in compliance with the License.
+%  You may obtain a copy of the License at
+%  http://www.apache.org/licenses/LICENSE-2.0
+%  Unless required by applicable law or agreed to in writing, software
+%  distributed under the License is distributed on an "AS IS" BASIS,
+%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%  See the License for the specific language governing permissions and
+%  limitations under the License.
+
+% Note: assumes that your files where your data are stored are called [workdir Prefix IDs(i) '_wavg_ap.erp']
+% Note: also assumes that you have files available at http://www.mathworks.com/matlabcentral/fileexchange/10465-xlswrite1 for writing data to xcel 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function ToneSeries(~)
+%This will present the tones and then ask the people for their responses of
+%how much they like them/do not like them. Do 20 trials for each triad,
+%each in increments of .1 seconds up to 2 seconds.
+BlockOrder = randperm(2);
+DomainOfDurations = [.1, .2, .3, .4, .5, .6, .7, .8, .9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2];
+DurationOrderer = randperm(20);
+LikeLogger = [];
+DislikeLogger = [];
+for Orderer2 = 1:20
+    DurationOrder = DomainOfDurations(DurationOrderer);
+end
+for Orderer3 = 1:2
+    if BlockOrder(Orderer3) == 1;
+        for Trial = 1:20
+            Duration = DurationOrder(Trial);
+            MajorTriad(Duration,Duration);
+            TimerExample(.05);
+            LikeLogger(1,end+1) = LikeTheseTones;
+            DislikeLogger(1,end+1) = DislikeTheseTones;
+        end
+    elseif BlockOrder(Orderer3) == 2;
+        for Trial = 1:20
+            Duration = DurationOrder(Trial);
+            MinorTriad(Duration,Duration);
+            TimerExample(.05);
+            LikeLogger(1,end+1) = LikeTheseTones;
+            DislikeLogger(1,end+1) = DislikeTheseTones;
+        end
+    end
+end
+
+%Now Log the results to xcel
+LogLength = 40;
+format bank
+DateTimeStamp = clock;
+AlreadyThereData = xlsread('MusicData.xls');
+OneMoreThanLengthofData = size(AlreadyThereData,1) + 2;
+PreWrite2;
+xlswrite1('MusicData.xls', DateTimeStamp, 1, strcat('A',int2str(OneMoreThanLengthofData)));
+for RowNumber = 1:LogLength
+    if RowNumber > 20
+    DurationToBeLogged = DurationOrder(RowNumber-20);
+    KeyToBeLogged = BlockOrder(2);
+    else
+    DurationToBeLogged = DurationOrder(RowNumber);
+    KeyToBeLogged = BlockOrder(1);
+    end
+    LikeToBeLogged = LikeLogger(RowNumber);
+    DislikeToBeLogged =  DislikeLogger(RowNumber);
+    try
+        RowToWriteTo = OneMoreThanLengthofData+RowNumber;
+        xlswrite1('MusicData.xls', DurationToBeLogged, 1, strcat('H',int2str(RowToWriteTo)));
+        xlswrite1('MusicData.xls', KeyToBeLogged, 1, strcat('G',int2str(RowToWriteTo)));
+        xlswrite1('MusicData.xls', LikeToBeLogged, 1, strcat('I',int2str(RowToWriteTo)));
+        xlswrite1('MusicData.xls', DislikeToBeLogged, 1, strcat('J',int2str(RowToWriteTo)));
+    catch
+        display('Data write error. This user-generated message from the catch statement @ line 76')
+    end
+end
+PostWrite1;
+display('Subject Complete');
+end
