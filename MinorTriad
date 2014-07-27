@@ -1,0 +1,11 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function MinorTriad(TimeBetween1, TimeBetween2)
+%minor triad of the A flat minor 7th chord
+ToneGenerator(415.3,1); %middle A flat
+TimerExample(TimeBetween1);
+ToneGenerator(246.94,1); %middle C flat
+TimerExample(TimeBetween2);
+ToneGenerator(311.13,1); %middle E flat
+end
+
