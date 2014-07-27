@@ -1,0 +1,9 @@
+
+function MajorTriad(TimeBetween1, TimeBetween2)
+%major triad of the C major 7th chord
+ToneGenerator(261.63,1); %middle C
+TimerExample(TimeBetween1);
+ToneGenerator(329.63,1); %middle E
+TimerExample(TimeBetween2);
+ToneGenerator(392.00,1); %middle G
+end
